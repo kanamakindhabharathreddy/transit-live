@@ -386,7 +386,7 @@ export default function MapView({ routeSummary, appTheme, onBack }) {
         </div>
 
         {/* Mobile: Back Button & Route Info */}
-        <div className="lg:hidden absolute top-4 left-4 right-4 z-[400] pointer-events-none transition-all duration-300 flex items-start gap-2">
+        <div className="lg:hidden absolute top-4 left-4 right-28 z-[400] pointer-events-none transition-all duration-300 flex items-start gap-2">
           
           <button 
             onClick={onBack}
@@ -397,7 +397,7 @@ export default function MapView({ routeSummary, appTheme, onBack }) {
             </svg>
           </button>
 
-          <div className="bg-ticket-surface/80 backdrop-blur-xl px-4 py-2.5 rounded-xl border border-ticket-border pointer-events-auto shadow-lg shadow-black/20 flex flex-col justify-center max-w-[calc(100%-3rem-0.5rem)]">
+          <div className="bg-ticket-surface/80 backdrop-blur-xl px-4 py-2.5 rounded-xl border border-ticket-border pointer-events-auto shadow-lg shadow-black/20 flex flex-col justify-center min-w-0">
             <span className="text-xl font-fraunces font-black text-ticket-cream leading-none truncate">
               {routeData.short_name}
             </span>

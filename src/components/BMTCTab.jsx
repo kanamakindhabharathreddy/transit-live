@@ -268,12 +268,26 @@ function BMTCTab({ indexData, stopsIndex, routeIdMap, stopsCoordinates, isDataLo
             if (dirData && dirData.path && dirData.stops) {
               const pathPositions = dirData.path;
               const pInfoIndex = dirData.stops.findIndex(s => s.name === route.pickup_stop.name);
+              const dInfoIndex = dirData.stops.findIndex(s => s.name === route.drop_stop.name);
               
               if (pInfoIndex !== -1) {
                 const stopsWithPathIdx = dirData.stops.map(stop => ({
                   ...stop,
                   pathIdx: getClosestPathIdx(stop.lat, stop.lon, pathPositions)
                 }));
+                
+                if (dInfoIndex !== -1 && dInfoIndex > pInfoIndex) {
+                  const pIdx = stopsWithPathIdx[pInfoIndex].pathIdx;
+                  const dIdx = stopsWithPathIdx[dInfoIndex].pathIdx;
+                  if (pIdx !== undefined && dIdx !== undefined && dIdx > pIdx) {
+                    let totalDist = 0;
+                    for (let j = pIdx; j < dIdx - 1; j++) {
+                      totalDist += getDistance(pathPositions[j][0], pathPositions[j][1], pathPositions[j+1][0], pathPositions[j+1][1]);
+                    }
+                    route.journey_distance_km = totalDist;
+                    route.journey_time_mins = Math.round((totalDist / 15) * 60);
+                  }
+                }
                 
                 let activeBusesBeforePickup = 0;
                 let minDistanceKm = Infinity;

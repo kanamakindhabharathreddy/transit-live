@@ -45,6 +45,11 @@ const RouteList = React.memo(function RouteList({ routes, onSelectRoute, selecte
               >
                 {route.direction ? `(${route.direction}) ` : ''}{route.long_name}
               </p>
+              {route.journey_time_mins && (
+                <p className="text-[10px] text-ticket-muted mt-0.5 font-medium">
+                  Est. Journey: ~{route.journey_time_mins} mins ({route.journey_distance_km.toFixed(1)} km)
+                </p>
+              )}
             </div>
 
             {/* Chevron */}

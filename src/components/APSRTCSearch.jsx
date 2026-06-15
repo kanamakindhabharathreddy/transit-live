@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, MapPin } from 'lucide-react';
+import { Search, MapPin, ArrowRightLeft } from 'lucide-react';
 
 function AutocompleteInput({ label, value, onChange, onSelect, placeholder, stations }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -131,7 +131,24 @@ export default function APSRTCSearch({ onSearch, isSearching, hasResults, statio
               stations={stations}
             />
 
-            <div className="h-[1px] bg-ticket-border/30 mx-3" />
+            <div className="flex items-center px-3 -my-2 relative z-10">
+              <div className="h-[1px] bg-ticket-border/30 flex-1" />
+              <div 
+                className="mx-2 bg-ticket-bg p-1.5 rounded-full border border-ticket-border/60 shadow cursor-pointer hover:bg-ticket-surface transition-colors group flex-shrink-0"
+                onClick={() => {
+                  const tQuery = fromQuery;
+                  const tPlace = fromPlace;
+                  setFromQuery(toQuery);
+                  setFromPlace(toPlace);
+                  setToQuery(tQuery);
+                  setToPlace(tPlace);
+                }}
+                title="Swap To and From"
+              >
+                <ArrowRightLeft className="w-3.5 h-3.5 text-ticket-muted group-hover:text-ticket-cream rotate-90 transition-colors" />
+              </div>
+              <div className="h-[1px] bg-ticket-border/30 flex-1" />
+            </div>
 
             <AutocompleteInput 
               label="To City" 

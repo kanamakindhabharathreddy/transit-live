@@ -340,7 +340,18 @@ export default function SearchBar({ onSearchRoute, onSearchFromTo, onSearchStop,
               {/* Swap divider */}
               <div className="flex items-center px-3">
                 <div className="gradient-divider flex-1" />
-                <div className="mx-2 bg-ticket-bg p-1.5 rounded-full border border-ticket-border/60 shadow cursor-pointer hover:bg-ticket-surface transition-colors group flex-shrink-0">
+                <div 
+                  className="mx-2 bg-ticket-bg p-1.5 rounded-full border border-ticket-border/60 shadow cursor-pointer hover:bg-ticket-surface transition-colors group flex-shrink-0"
+                  onClick={() => {
+                    const tempQuery = fromQuery;
+                    const tempSelected = fromSelected;
+                    setFromQuery(toQuery);
+                    setFromSelected(toSelected);
+                    setToQuery(tempQuery);
+                    setToSelected(tempSelected);
+                  }}
+                  title="Swap To and From"
+                >
                   <ArrowRightLeft className="w-3.5 h-3.5 text-ticket-muted group-hover:text-ticket-cream rotate-90 transition-colors" />
                 </div>
                 <div className="gradient-divider flex-1" />

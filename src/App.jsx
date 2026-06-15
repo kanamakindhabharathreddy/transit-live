@@ -42,24 +42,18 @@ function App() {
       {/* ── PAGE HEADER ── */}
       <header className="relative max-w-[1400px] mx-auto px-6 pt-10 pb-4 text-center">
         {/* Theme Switcher */}
-        <div className="absolute top-6 right-6 flex items-center gap-1 bg-ticket-card border border-ticket-border/60 rounded-full p-1 shadow-lg">
-          {[
-            { id: 'dark', icon: Moon, label: 'Dark' },
-            { id: 'light', icon: Sun, label: 'Light' }
-          ].map(theme => (
-            <button
-              key={theme.id}
-              onClick={() => setAppTheme(theme.id)}
-              className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                appTheme === theme.id ? 'bg-ticket-surface shadow-inner border border-ticket-border/80 scale-105' : 'hover:bg-ticket-surface/50 opacity-70 hover:opacity-100'
-              }`}
-              title={`${theme.label} theme`}
-            >
-              {theme.icon && (
-                <theme.icon className={`w-4 h-4 ${appTheme === theme.id ? 'text-ticket-coral' : 'text-ticket-muted'}`} />
-              )}
-            </button>
-          ))}
+        <div className="absolute top-6 right-6 z-50">
+          <button
+            onClick={() => setAppTheme(appTheme === 'dark' ? 'light' : 'dark')}
+            className="w-10 h-10 bg-ticket-card border border-ticket-border/60 rounded-full flex items-center justify-center shadow-lg transition-all hover:bg-ticket-surface hover:scale-105"
+            title={`Switch to ${appTheme === 'dark' ? 'light' : 'dark'} theme`}
+          >
+            {appTheme === 'dark' ? (
+              <Sun className="w-5 h-5 text-ticket-cream" />
+            ) : (
+              <Moon className="w-5 h-5 text-ticket-cream" />
+            )}
+          </button>
         </div>
 
         {/* Logo / wordmark */}

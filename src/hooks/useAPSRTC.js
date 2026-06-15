@@ -34,7 +34,11 @@ export function useAPSRTC() {
     .then(data => {
       // /places/all returns { status: 'success', placeInfos: [...] }
       if (data && data.status === 'success' && data.placeInfos) {
-        setStations(data.placeInfos);
+        // Filter out junk/minor stops to match official site behavior
+        const filteredStations = data.placeInfos.filter(
+          p => p.isTransPoint === '1' || p.isSector === 'Y'
+        );
+        setStations(filteredStations);
       }
     })
     .catch(err => console.error('Failed to load APSRTC stations:', err));

@@ -45,18 +45,25 @@ const RouteList = React.memo(function RouteList({ routes, onSelectRoute, selecte
               >
                 {route.direction ? `(${route.direction}) ` : ''}{route.long_name}
               </p>
-              {route.journey_time_mins && (
-                <p className="text-[10px] text-ticket-muted mt-0.5 font-medium">
-                  Est. Journey: ~{route.journey_time_mins} mins ({route.journey_distance_km.toFixed(1)} km)
+              {route.journey_distance_km && (
+                <p className="text-[10px] text-ticket-muted mt-0.5">
+                  {route.journey_distance_km.toFixed(1)} km distance
                 </p>
               )}
             </div>
 
-            {/* Chevron */}
-            <div className={`flex-shrink-0 ml-2 transition-colors ${
-              isSelected ? 'text-ticket-coral' : 'text-ticket-muted/50 group-hover:text-ticket-muted'
-            }`}>
-              <ChevronRight className="w-4 h-4" />
+            {/* Journey Time & Chevron */}
+            <div className="flex-shrink-0 flex items-center gap-3 ml-2">
+              {route.journey_time_mins && (
+                <div className="text-right">
+                  <span className="text-sm font-bold text-ticket-cream">{route.journey_time_mins} min</span>
+                </div>
+              )}
+              <div className={`transition-colors ${
+                isSelected ? 'text-ticket-coral' : 'text-ticket-muted/50 group-hover:text-ticket-muted'
+              }`}>
+                <ChevronRight className="w-4 h-4" />
+              </div>
             </div>
           </motion.div>
         );

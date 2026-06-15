@@ -28,7 +28,7 @@ export default function RouteTimelineView({ stops, buses, userJourney, onBusClic
   if (!stops || stops.length === 0) return null;
 
   return (
-    <div className="absolute inset-0 bg-ticket-bg overflow-y-auto p-4 md:p-8 custom-scrollbar z-0 pb-32 lg:pb-8">
+    <div className="absolute inset-0 bg-ticket-bg overflow-y-auto pt-24 pb-32 px-4 md:px-8 md:pt-28 lg:pb-8 custom-scrollbar z-0">
       <div className="max-w-xl mx-auto">
         <div className="relative ml-2 md:ml-4 mt-4">
           

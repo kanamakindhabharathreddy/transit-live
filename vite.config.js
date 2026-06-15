@@ -10,7 +10,31 @@ export default defineConfig({
         target: 'https://bmtcmobileapi.karnataka.gov.in',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/bmtc-api/, ''),
-        secure: false, // In case of cert issues
+        secure: false,
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            console.error('proxy error', err.message);
+            if (!res.headersSent) {
+              res.writeHead(502, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: 'Proxy Error' }));
+            }
+          });
+        }
+      },
+      '/api/apsrtc': {
+        target: 'https://utsappapicached01.apsrtconline.in/uts-vts-api',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/apsrtc/, ''),
+        secure: false,
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            console.error('APSRTC proxy error', err.message);
+            if (!res.headersSent) {
+              res.writeHead(502, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: 'APSRTC Proxy Error' }));
+            }
+          });
+        }
       }
     }
   }

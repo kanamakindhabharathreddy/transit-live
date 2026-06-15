@@ -1,55 +1,63 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Bus, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
-export default function RouteList({ routes, onSelectRoute, selectedRoute, emptyMessage = "No routes found." }) {
+const RouteList = React.memo(function RouteList({ routes, onSelectRoute, selectedRoute, emptyMessage = 'No routes found.' }) {
   if (!routes || routes.length === 0) {
     return (
-      <div className="text-center py-12 text-slate-500">
+      <div className="text-center py-8 text-ticket-muted text-sm">
         {emptyMessage}
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-[600px] mx-auto flex flex-col gap-3 pb-4">
+    <div className="flex flex-col gap-2">
       {routes.map((route, idx) => {
-        const isSelected = selectedRoute && selectedRoute.route_short === route.route_short && selectedRoute.direction === route.direction;
+        const isSelected = selectedRoute && selectedRoute.filename === route.filename;
         return (
           <motion.div
             key={route.route_short + '_' + (route.direction || 'base') + '_' + idx}
-            initial={{ opacity: 0, y: 5 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.15, delay: idx * 0.02 }}
-            className={`flex flex-row items-center p-4 rounded-xl border cursor-pointer transition-all shadow-sm group text-left ${
-              isSelected 
-                ? 'bg-slate-700 border-emerald-500 ring-1 ring-emerald-500/50' 
-                : 'bg-slate-800 border-slate-700 hover:bg-slate-700 hover:border-blue-500/50'
+            transition={{ delay: idx * 0.05, duration: 0.2 }}
+            className={`flex flex-row items-center p-3 rounded-lg cursor-pointer transition-all duration-150 group ${
+              isSelected
+                ? 'surface-l3-coral bg-gradient-to-r from-ticket-coral/10 to-ticket-surface/80 border-l-[3px] border-l-ticket-coral border-y border-r border-y-ticket-border/40 border-r-ticket-border/40'
+                : 'bg-ticket-card/40 border border-transparent hover:bg-ticket-surface/50 hover:border-ticket-border/40'
             }`}
             onClick={() => onSelectRoute(route)}
           >
-          {/* Icon on the left */}
-          <div className="flex-shrink-0 bg-slate-700/50 text-blue-400 p-2.5 rounded-lg group-hover:bg-blue-500 group-hover:text-white transition-colors mr-4">
-            <Bus className="w-6 h-6" />
-          </div>
-          
-          {/* Text content (flex-grow) */}
-          <div className="flex-grow flex flex-col items-start overflow-hidden">
-            <div className="flex items-center space-x-2">
-              <span className="text-xl font-bold text-slate-100 leading-none">{route.route_short}</span>
+            {/* Route badge — Level 2 */}
+            <div className={`flex-shrink-0 font-mono font-semibold px-2.5 py-1.5 rounded-md text-sm mr-3 border transition-colors ${
+              isSelected
+                ? 'bg-ticket-coral/15 text-ticket-coral border-ticket-coral/40'
+                : 'bg-ticket-bg/60 text-ticket-coral border-ticket-coral/25 group-hover:border-ticket-coral/40'
+            }`}>
+              {route.route_short}
             </div>
-            <p className="text-slate-400 text-sm truncate w-full mt-1.5 leading-tight" title={route.long_name}>
-              {route.direction ? `(${route.direction}) ` : ''}{route.long_name}
-            </p>
-          </div>
-          
-          {/* Chevron on the right */}
-          <div className="flex-shrink-0 text-slate-600 group-hover:text-blue-400 ml-4 transition-colors">
-            <ChevronRight className="w-5 h-5" />
-          </div>
-        </motion.div>
+
+            {/* Route name */}
+            <div className="flex-grow overflow-hidden">
+              <p
+                className="text-ticket-cream/90 font-medium text-xs truncate leading-tight"
+                title={route.long_name}
+              >
+                {route.direction ? `(${route.direction}) ` : ''}{route.long_name}
+              </p>
+            </div>
+
+            {/* Chevron */}
+            <div className={`flex-shrink-0 ml-2 transition-colors ${
+              isSelected ? 'text-ticket-coral' : 'text-ticket-muted/50 group-hover:text-ticket-muted'
+            }`}>
+              <ChevronRight className="w-4 h-4" />
+            </div>
+          </motion.div>
         );
       })}
     </div>
   );
-}
+});
+
+export default RouteList;

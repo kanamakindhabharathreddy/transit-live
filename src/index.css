@@ -1,26 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@600;900&family=Work+Sans:wght@400;500&family=IBM+Plex+Mono:wght@600&display=swap');
 @import 'leaflet/dist/leaflet.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ─── THEME DEFINITIONS (RGB values for Tailwind opacity support) ─── */
 @layer base {
+  :root, [data-theme="dark"] {
+    --ticket-bg: 14 18 32;       /* #0e1220 - deepest blue */
+    --ticket-surface: 37 46 82;  /* #252e52 - indigo surface */
+    --ticket-card: 22 29 56;     /* #161d38 - darker card */
+    --ticket-border: 52 64 110;  /* #34406e - lighter indigo border */
+    
+    --ticket-coral: 232 130 92;  /* #e8825c - brand coral */
+    --ticket-cream: 244 228 193; /* #f4e4c1 - warm cream text */
+    --ticket-muted: 163 179 214; /* #a3b3d6 - muted blue/gray */
+  }
+
+  [data-theme="light"] {
+    --ticket-bg: 245 242 235;      /* #f5f2eb - Off-white / cream background */
+    --ticket-surface: 255 255 255; /* #ffffff - White surface */
+    --ticket-card: 250 248 242;    /* #faf8f2 - Slightly off-white card */
+    --ticket-border: 215 210 200;  /* #d7d2c8 - Light gray-brown border */
+    
+    --ticket-coral: 210 80 50;     /* #d25032 - Darker coral for contrast on light */
+    --ticket-cream: 30 35 45;      /* #1e232d - Dark text instead of cream */
+    --ticket-muted: 100 110 120;   /* #646e78 - Darker muted text */
+  }
+
   body {
-    @apply bg-slate-900 text-slate-100 antialiased;
+    background-color: rgb(var(--ticket-bg));
+    /* Rich Gradient mesh + Geometric dot grid pattern */
+    background-image:
+      radial-gradient(ellipse at 15% 10%, rgb(var(--ticket-coral) / 0.15) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 90%, rgb(var(--ticket-coral) / 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgb(var(--ticket-surface) / 0.6) 0%, transparent 70%),
+      radial-gradient(rgb(var(--ticket-border) / 0.4) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 20px 20px;
+    background-attachment: fixed;
+    color: rgb(var(--ticket-cream));
+    font-family: 'Work Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 }
 
+/* ─── ROUTE-LINE BACKGROUND MOTIF (transit-themed SVG curves) ─── */
+/* Applied via a pseudo-element on #root so it sits behind all content */
+#root {
+  position: relative;
+  min-height: 100vh;
+}
+#root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cpath d='M-50 200 Q200 150 400 280 T800 240 T1200 180 T1500 220' stroke='%23e8825c' stroke-width='1.5' opacity='0.045'/%3E%3Cpath d='M-50 420 Q300 380 550 460 T950 400 T1300 450 T1500 420' stroke='%23e8825c' stroke-width='1' opacity='0.03'/%3E%3Cpath d='M-50 680 Q250 640 500 700 T900 660 T1300 700 T1500 680' stroke='%23f4e4c1' stroke-width='1' opacity='0.025'/%3E%3Ccircle cx='400' cy='280' r='3' fill='%23e8825c' opacity='0.07'/%3E%3Ccircle cx='800' cy='240' r='3' fill='%23e8825c' opacity='0.07'/%3E%3Ccircle cx='1200' cy='180' r='3' fill='%23e8825c' opacity='0.07'/%3E%3Ccircle cx='550' cy='460' r='2.5' fill='%23e8825c' opacity='0.06'/%3E%3Ccircle cx='950' cy='400' r='2.5' fill='%23e8825c' opacity='0.06'/%3E%3Ccircle cx='500' cy='700' r='2' fill='%23f4e4c1' opacity='0.05'/%3E%3Ccircle cx='900' cy='660' r='2' fill='%23f4e4c1' opacity='0.05'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Ensure all app content sits above the motif layer */
+#root > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── CUSTOM SCROLLBAR — themed to match the palette ─── */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(30, 41, 59, 0.5); /* slate-800 */
+  background: transparent;
   border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(71, 85, 105, 0.8); /* slate-600 */
+  background: rgb(var(--ticket-border) / 0.8);
   border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 1); /* slate-500 */
+  background: rgb(var(--ticket-coral) / 0.5);
 }
+
+/* ─── PREVENT BROWSER INPUT BACKGROUND OVERRIDES ─── */
+input, input:focus, input:active, input:hover {
+  background-color: inherit !important;
+  caret-color: rgb(var(--ticket-cream));
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px rgb(var(--ticket-card)) inset !important;
+  -webkit-text-fill-color: rgb(var(--ticket-cream)) !important;
+  box-shadow: 0 0 0 1000px rgb(var(--ticket-card)) inset !important;
+}
+
+/* ─── GOOGLE MAPS DARK FILTER ─── */
+.map-tiles-dark {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%) !important;
+}
+
+/* ─── MAP INFO CARD — ticket perforation + glass highlight ─── */
+.info-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 4px 6px -1px rgba(0, 0, 0, 0.5),
+    0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+.info-card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 32px;
+  right: 32px;
+  height: 1px;
+  background-image: radial-gradient(circle, rgb(var(--ticket-bg)) 3.5px, transparent 3.5px);
+  background-size: 16px 16px;
+  background-position: 0 -7px;
+}
+
+/* ─── ELEVATION SYSTEM ─── */
+
+/* Level 1: Panel/container surfaces */
+.surface-l1 {
+  background: rgb(var(--ticket-card));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 8px 32px -4px rgba(0, 0, 0, 0.45),
+    0 2px 8px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* Level 2: Cards within containers */
+.surface-l2 {
+  background: rgb(var(--ticket-surface));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 2px 8px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* Level 3: Active/selected elements — coral glow */
+.surface-l3-coral {
+  box-shadow:
+    inset 0 1px 0 rgb(var(--ticket-coral) / 0.1),
+    0 0 0 1px rgb(var(--ticket-coral) / 0.15),
+    0 4px 16px -2px rgb(var(--ticket-coral) / 0.15),
+    0 2px 8px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* ─── GRADIENT DIVIDER ─── */
+.gradient-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgb(var(--ticket-border) / 0.8), transparent);
+  border: none;
+}
+
+/* ─── SHIMMER SKELETON ANIMATION ─── */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--ticket-surface) / 0.6) 25%,
+    rgb(var(--ticket-border) / 0.5) 50%,
+    rgb(var(--ticket-surface) / 0.6) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* --- BUS ANIMATIONS --- */
+@keyframes bus-shake {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-1px) rotate(-3deg); }
+  50% { transform: translateY(1px) rotate(3deg); }
+  75% { transform: translateY(-1px) rotate(-1.5deg); }
+}
+
+@keyframes bus-smoke {
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  20% { opacity: 0.7; }
+  100% { transform: translateY(-20px) scale(2.5); opacity: 0; }
+}
+
+.animate-bus-shake {
+  animation: bus-shake 0.6s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.bus-smoke-particle {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background-color: rgba(200, 200, 200, 0.8);
+  border-radius: 50%;
+  margin-left: -3px;
+  animation: bus-smoke 1.2s ease-out infinite;
+  z-index: 0;
+  filter: blur(1px);
+}
+.bus-smoke-particle:nth-child(2) {
+  animation-delay: 0.4s;
+  left: 40%;
+}
+.bus-smoke-particle:nth-child(3) {
+  animation-delay: 0.8s;
+  left: 60%;
+}
+

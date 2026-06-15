@@ -1,0 +1,34 @@
+{
+  "25-A": {
+    "routeparentid": "12345",
+    "up": {
+      "first_bus": "05:30",
+      "last_bus": "22:45",
+      "frequency_minutes": 15,
+      "frequency_label": "Every 15-20 min"
+    },
+    "down": {
+      "first_bus": "05:45",
+      "last_bus": "23:00",
+      "frequency_minutes": 15,
+      "frequency_label": "Every 15-20 min"
+    },
+    "notes": "Reduced frequency after 9 PM"
+  },
+  "325-A": {
+    "routeparentid": "67890",
+    "up": {
+      "first_bus": "06:00",
+      "last_bus": "21:30",
+      "frequency_minutes": 30,
+      "frequency_label": "Every 30 min"
+    },
+    "down": {
+      "first_bus": "06:15",
+      "last_bus": "21:45",
+      "frequency_minutes": 30,
+      "frequency_label": "Every 30 min"
+    },
+    "notes": null
+  }
+}
